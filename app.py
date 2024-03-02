@@ -3,9 +3,9 @@ import pandas as pd
 from streamlit_option_menu import option_menu
 from ydata_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
-from pycaret.classification import setup, compare_models, pull, save_model, load_model, evaluate_model,plot_model, ClassificationExperiment
+from pycaret.classification import ClassificationExperiment
 import os 
-from sklearn.datasets import load_diabetes
+# from sklearn.datasets import load_diabetes
 import lazypredict
 from lazypredict.Supervised import LazyClassifier
 from sklearn.model_selection import train_test_split
@@ -17,10 +17,10 @@ import base64 #for lazypred
 import io #for lazypred
 from tpot import TPOTClassifier #tpot
 from sklearn.model_selection import StratifiedKFold #tpot
-from stqdm import stqdm #tpot
-import time #tpot
-from streamlit_shap import st_shap
-import shap
+# from stqdm import stqdm #tpot
+# import time #tpot
+# from streamlit_shap import st_shap
+# import shap
 
 #streamlit-wide-layout
 st.set_page_config(layout="wide")
