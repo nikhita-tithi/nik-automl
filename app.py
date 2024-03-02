@@ -291,25 +291,25 @@ if selected == "TPOT":
         st.info(y.shape)
         best_pipes =[]
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=.20,random_state =123)
-        # tpot = TPOTClassifier(
-        #                     random_state=42,
-        #                     generations=1,
-        #                     population_size=10,
-        #                     verbosity=2)
-        # with st.spinner(text='Pipeline optimization in progress'):
-        #     for i in stqdm(range(1)):
-        #         start_time = timeit.default_timer()
-        #         tpot.fit(X_train, y_train)
-        #         elapsed = timeit.default_timer() - start_time
-        #         score = tpot.score(X_test, y_test)
-        #         best_pipes.append(tpot.fitted_pipeline_)
-        #         st.write(f'\n__Pipeline optimization iteration: {i}__\n')
-        #         st.write(f'* Elapsed time: {elapsed} seconds')
-        #         st.write(f'* Pipeline score on test data: {score}')
-        tpot = TPOTClassifier(generations=5, population_size=50, verbosity=2, random_state=42)
-        tpot.fit(X_train, y_train)
-        print(tpot.score(X_test, y_test))
+        # X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=.20,random_state =123)
+        # # tpot = TPOTClassifier(
+        # #                     random_state=42,
+        # #                     generations=1,
+        # #                     population_size=10,
+        # #                     verbosity=2)
+        # # with st.spinner(text='Pipeline optimization in progress'):
+        # #     for i in stqdm(range(1)):
+        # #         start_time = timeit.default_timer()
+        # #         tpot.fit(X_train, y_train)
+        # #         elapsed = timeit.default_timer() - start_time
+        # #         score = tpot.score(X_test, y_test)
+        # #         best_pipes.append(tpot.fitted_pipeline_)
+        # #         st.write(f'\n__Pipeline optimization iteration: {i}__\n')
+        # #         st.write(f'* Elapsed time: {elapsed} seconds')
+        # #         st.write(f'* Pipeline score on test data: {score}')
+        # tpot = TPOTClassifier(generations=5, population_size=50, verbosity=2, random_state=42)
+        # tpot.fit(X_train, y_train)
+        # print(tpot.score(X_test, y_test))
         # tpot.fitted_pipeline_.predict(X_test) uncomment to check result
 
         # best_pipes[0].
