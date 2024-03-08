@@ -7,13 +7,13 @@ from streamlit_pandas_profiling import st_profile_report
 from pycaret.classification import ClassificationExperiment
 from sklearn.datasets import load_diabetes
 import os 
-import lazypredict
-from lazypredict.Supervised import LazyClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.utils import all_estimators #for lazypred
-from sklearn.base import ClassifierMixin #for lazypred
-import matplotlib.pyplot as plt #for lazypred
-import seaborn as sns #for lazypred
+# import lazypredict
+# from lazypredict.Supervised import LazyClassifier
+# from sklearn.model_selection import train_test_split
+# from sklearn.utils import all_estimators #for lazypred
+# from sklearn.base import ClassifierMixin #for lazypred
+# import matplotlib.pyplot as plt #for lazypred
+# import seaborn as sns #for lazypred
 import base64 #for lazypred
 import io #for lazypred
 # import time #tpot
@@ -162,3 +162,59 @@ if selected == "EDA":
         st.__loader__
  # else:
  #     st.error("Oops looks like your data is unavailable. Please try uploading you data again.")
+
+
+#----------------- PyCaret (AutoML using PyCaret)--------------------------------------------------------        
+if selected == "PyCaret":
+    st.header("AutoML using PyCaret")
+    chosen_target = st.selectbox('Choose the Target Column', df.columns)
+    if chosen_target and chosen_target != df.columns[0]:
+        s = ClassificationExperiment()
+        s.setup(df, target=chosen_target,normalize=True, 
+            transformation=True)
+        setup_df = s.pull()
+        st.dataframe(setup_df)
+        # st.header("Run AutoML")
+        # df[(df['diabetes'] == 1) | (df['diabetes'] == 0)]
+        # best_model = compare_models()
+        best = s.compare_models() 
+        # progress_text = "Operation in progress. Please wait."
+        # my_bar = st.progress(0, text=progress_text)
+        
+        if best:
+            compare_df = s.pull()
+            st.dataframe(compare_df)
+            # bmodel = list(compare_df)
+            st.header("Best Model")
+            st.text(best)
+            # st.dataframe(best_model)
+            # evaluate_model(compare_df)
+            s.evaluate_model(best)
+            # model = s.create_model(compare_df[''][0], feature_selection=True, feature_interaction=True, feature_ratio=True)
+            st.write(best)
+
+            # tuned_model = s.tune_model(best, n_iter=5, search_library='optuna')
+            # st.write(tuned_model)
+
+            # st.write(s.interpret_model(best, plot='summary'))
+            # Display additional information or visualizations based on the model output
+            # Use interpret_model to generate and display charts
+            # st.subheader("Visualizations")
+            # interpret_model(best_model)
+
+            # Show Streamlit charts based on the evaluation
+            st.subheader("Model Evaluation Charts")
+  
+            s.plot_model(best, plot = 'confusion_matrix', display_format='streamlit')
+            s.plot_model(best, plot = 'auc', display_format='streamlit')
+            s.plot_model(best, plot = 'feature', display_format='streamlit') 
+
+            st.subheader("Model Evaluation Charts")
+
+            s.plot_model(best, plot = 'feature_all', display_format='streamlit') 
+
+            # interactive(children=(ToggleButtons(description='Plot Type:', icons=('',), options=(('Pipeline Plot', 'pipeline'), ('Hyperparameters', 'parameter'), ('AUC', 'auc'), ('Confusion Matrix', 'confusion_matrix'), ('Threshold', 'threshold'), ('Precision Recall', 'pr'), ('Prediction Error', 'error'), ('Class Report', 'class_report'), ('Feature Selection', 'rfe'), ('Learning Curve', 'learning'), ('Manifold Learning', 'manifold'), ('Calibration Curve', 'calibration'), ('Validation Curve', 'vc'), ('Dimensions', 'dimension'), ('Feature Importance', 'feature'), ('Feature Importance (All)', 'feature_all'), ('Decision Boundary', 'boundary'), ('Lift Chart', 'lift'), ('Gain Chart', 'gain'), ('Decision Tree', 'tree'), ('KS Statistic Plot', 'ks')), value='pipeline'), Output()), _dom_classes=('widget-interact',))
+        else:
+            st.__loader__
+
+            
