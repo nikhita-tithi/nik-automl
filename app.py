@@ -19,6 +19,7 @@ import io #for lazypred
 # import time #tpot
 from streamlit_shap import st_shap
 import shap
+from AutoClean import AutoClean
 
 #streamlit-wide-layout
 st.set_page_config(layout="wide") 
@@ -136,19 +137,6 @@ if selected == "Data Information":
  # else:
  #     st.error("Oops looks like your data is unavailable. Please try uploading you data again.")
         
-#----------------- Data Cleaning (Data Preprocessing)--------------------------------------------------------
-if selected == "Data Cleaning":
-    st.header("Data Cleaning")
-    
-    if df is not None: 
-        st.dataframe(df)
-        #Add data cleaning code here
-    else:
-        st.__loader__
- # else:
- #     st.error("Oops looks like your data is unavailable. Please try uploading you data again.")
-
-
 
 #----------------- EDA (Data analysis)--------------------------------------------------------
 if selected == "EDA":
@@ -160,6 +148,34 @@ if selected == "EDA":
             selected="Home"
         if st.button("AutoML"):
             selected="AutoML"
+    else:
+        st.__loader__
+ # else:
+ #     st.error("Oops looks like your data is unavailable. Please try uploading you data again.")
+        
+        
+#----------------- Data Cleaning (Data Preprocessing)--------------------------------------------------------
+if selected == "Data Cleaning":
+    st.header("Data Cleaning")
+    
+    if df is not None: 
+        mode = st.selectbox('Select the mode:', ['auto','manual'])
+        duplicates = st.selectbox('Select the duplicates:', [False,'auto','True'])
+        missing_num = st.selectbox('Select the Missing number:', [False,'auto', 'linreg', 'knn', 'mean', 'median', 'most_frequent', 'delete'])
+        missing_categ = st.selectbox('Select the missing categorical:', [False,'auto', 'logreg', 'knn', 'most_frequent', 'delete'])
+        encode_categ = st.selectbox('Select the Encoding categorical columns', [False,'auto', ['onehot'], ['label']])
+        outliers = st.selectbox('Select the Outlier:', [False,'auto', 'winz', 'delete'])
+        verbose = st.selectbox('Select the verbose:', [True,False])
+        st.dataframe(df)
+        data = df
+        if st.button("Run Cleaning"):
+        
+            st.write("After cleaning the data...")
+            pipeline = AutoClean(data, mode=mode, duplicates=duplicates, missing_num=missing_num, missing_categ=missing_categ, 
+            encode_categ=encode_categ, extract_datetime=False, outliers=outliers, outlier_param=1.5, 
+            logfile=True, verbose=verbose)
+            st.write(pipeline.output)
+            df = pipeline.output
     else:
         st.__loader__
  # else:
@@ -217,8 +233,6 @@ if selected == "PyCaret":
             s.plot_model(best, plot = 'confusion_matrix', display_format='streamlit')
             s.plot_model(best, plot = 'auc', display_format='streamlit')
             s.plot_model(best, plot = 'feature', display_format='streamlit') 
-
-            st.subheader("Model Evaluation Charts")
 
             s.plot_model(best, plot = 'feature_all', display_format='streamlit') 
 
