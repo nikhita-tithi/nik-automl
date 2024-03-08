@@ -17,7 +17,7 @@ from pycaret.classification import ClassificationExperiment
 import base64 #for lazypred
 import io #for lazypred
 # import time #tpot
-from streamlit_shap import st_shap
+# from streamlit_shap import st_shap
 import shap
 from AutoClean import AutoClean
 
