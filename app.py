@@ -1,6 +1,5 @@
 #Importing all the necessary libraries and packages
 import os 
-os.environ['SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL']=True
 import streamlit as st 
 import pandas as pd
 from streamlit_option_menu import option_menu
@@ -152,7 +151,7 @@ if selected == "Data Cleaning":
 #----------------- EDA (Data analysis)--------------------------------------------------------
 if selected == "EDA":
     st.header("Auto-analysis - EDA")
-    profile = ProfileReport(df, title="Profiling Report")
+    profile = ProfileReport(df, title="Profiling Report",explorative=True)
     if profile: 
         st_profile_report(profile)
         if st.button("Home"):
