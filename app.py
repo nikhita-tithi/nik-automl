@@ -14,8 +14,8 @@ from pycaret.classification import ClassificationExperiment
 # from sklearn.base import ClassifierMixin #for lazypred
 # import matplotlib.pyplot as plt #for lazypred
 # import seaborn as sns #for lazypred
-import base64 #for lazypred
-import io #for lazypred
+# import base64 #for lazypred
+# import io #for lazypred
 # import time #tpot
 # from streamlit_shap import st_shap
 import shap
@@ -36,20 +36,20 @@ st.session_state.setdefault('df', None)
 
 # Function to Download CSV data 
 # https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806
-def filedownload(df, filename):
-    csv = df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
-    href = f'<a href="data:file/csv;base64,{b64}" download={filename}>Download {filename} File</a>'
-    return href
+# def filedownload(df, filename):
+#     csv = df.to_csv(index=False)
+#     b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
+#     href = f'<a href="data:file/csv;base64,{b64}" download={filename}>Download {filename} File</a>'
+#     return href
 
 # Function to download image files of charts
-def imagedownload(plt, filename):
-    s = io.BytesIO()
-    plt.savefig(s, format='pdf', bbox_inches='tight')
-    plt.close()
-    b64 = base64.b64encode(s.getvalue()).decode()  # strings <-> bytes conversions
-    href = f'<a href="data:image/png;base64,{b64}" download={filename}>Download {filename} File</a>'
-    return href
+# def imagedownload(plt, filename):
+#     s = io.BytesIO()
+#     plt.savefig(s, format='pdf', bbox_inches='tight')
+#     plt.close()
+#     b64 = base64.b64encode(s.getvalue()).decode()  # strings <-> bytes conversions
+#     href = f'<a href="data:image/png;base64,{b64}" download={filename}>Download {filename} File</a>'
+#     return href
 
 # title of the web application
 st.title("Welcome to iBioML - AutoML")
