@@ -6,7 +6,7 @@ from streamlit_option_menu import option_menu
 from ydata_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
 from pycaret.classification import ClassificationExperiment
-from sklearn.datasets import load_diabetes
+# from sklearn.datasets import load_diabetes
 # import lazypredict
 # from lazypredict.Supervised import LazyClassifier
 # from sklearn.model_selection import train_test_split
@@ -17,8 +17,8 @@ from sklearn.datasets import load_diabetes
 import base64 #for lazypred
 import io #for lazypred
 # import time #tpot
-# from streamlit_shap import st_shap
-# import shap
+from streamlit_shap import st_shap
+import shap
 
 #streamlit-wide-layout
 st.set_page_config(layout="wide") 
@@ -87,10 +87,12 @@ if selected == "Home":
             df = pd.read_csv("http://localhost:8501/app/static/diabetes_dataset.csv")
             df.to_csv('dataset.csv', index=None)
         else:
-            diabetes = load_diabetes()
-            X = pd.DataFrame(diabetes.data, columns=diabetes.feature_names)
-            Y = pd.Series(diabetes.target, name='response')
-            df = pd.concat( [X,Y], axis=1 )
+            st.error("Please Upload a .csv file!")
+        # else:
+        #     diabetes = load_diabetes()
+        #     X = pd.DataFrame(diabetes.data, columns=diabetes.feature_names)
+        #     Y = pd.Series(diabetes.target, name='response')
+        #     df = pd.concat( [X,Y], axis=1 )
         st.write('Data Uploaded Successfully')
         st.text("To Auto-Analyze your data click next!")
         if st.button("Next Tab"):
@@ -192,9 +194,16 @@ if selected == "PyCaret":
             s.evaluate_model(best)
             # model = s.create_model(compare_df[''][0], feature_selection=True, feature_interaction=True, feature_ratio=True)
             st.write(best)
+            temp_df = df
+            # Tune the best model
+            tuned_model = s.tune_model(best)
+            st.write(tuned_model)
+            # Explain the model using SHAP values
+            explainer = shap.Explainer(tuned_model)
+            shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
 
-            # tuned_model = s.tune_model(best, n_iter=5, search_library='optuna')
-            # st.write(tuned_model)
+            st.subheader("SHAP Summary Plot:")
+            st.pyplot(shap.summary_plot(shap_values, temp_df.drop(chosen_target, axis=1)))    
 
             # st.write(s.interpret_model(best, plot='summary'))
             # Display additional information or visualizations based on the model output
