@@ -57,8 +57,8 @@ st.title("Welcome to iBioML - AutoML")
 # adding a text description
 st.text("This web application allows users to automate their machine learning processes by just uploading their data. ")
 
-# adding a horizontal divider
-st.divider()
+# # adding a horizontal divider
+# st.divider()
 
 #adding a horizontal menu
 selected = option_menu(
