@@ -15,9 +15,6 @@ import matplotlib.pyplot as plt #for lazypred
 import seaborn as sns #for lazypred
 import base64 #for lazypred
 import io #for lazypred
-from tpot import TPOTClassifier #tpot
-from sklearn.model_selection import StratifiedKFold #tpot
-# from stqdm import stqdm #tpot
 # import time #tpot
 # from streamlit_shap import st_shap
 # import shap
@@ -268,56 +265,3 @@ if selected == "LazyPredict":
         else:
             st.__loader__
 
-#----------------- TPOT (AutoML using TPOT)--------------------------------------------------------        
-if selected == "TPOT":
-    st.header("AutoML using TPOT")
-    chosen_target = st.selectbox('Choose the Target Column', df.columns)
-    scoring='accuracy'
-    cv = ('stratified k-fold cross-validation',
-          StratifiedKFold(n_splits = 10, shuffle = True, random_state=42))
-    if chosen_target and chosen_target != df.columns[0]:
-        data = df.copy()
-        y= data[chosen_target]
-        data.drop(chosen_target,axis =1)
-        X = data.drop(chosen_target,axis =1)
-
-        # Display X and y values
-        st.markdown('Dataset dimensions')
-        st.text("X values:")
-        st.write(X)
-        st.info(X.shape)
-        st.text("Y values:")
-        st.write(y)
-        st.info(y.shape)
-        best_pipes =[]
-
-        # X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=.20,random_state =123)
-        # # tpot = TPOTClassifier(
-        # #                     random_state=42,
-        # #                     generations=1,
-        # #                     population_size=10,
-        # #                     verbosity=2)
-        # # with st.spinner(text='Pipeline optimization in progress'):
-        # #     for i in stqdm(range(1)):
-        # #         start_time = timeit.default_timer()
-        # #         tpot.fit(X_train, y_train)
-        # #         elapsed = timeit.default_timer() - start_time
-        # #         score = tpot.score(X_test, y_test)
-        # #         best_pipes.append(tpot.fitted_pipeline_)
-        # #         st.write(f'\n__Pipeline optimization iteration: {i}__\n')
-        # #         st.write(f'* Elapsed time: {elapsed} seconds')
-        # #         st.write(f'* Pipeline score on test data: {score}')
-        # tpot = TPOTClassifier(generations=5, population_size=50, verbosity=2, random_state=42)
-        # tpot.fit(X_train, y_train)
-        # print(tpot.score(X_test, y_test))
-        # tpot.fitted_pipeline_.predict(X_test) uncomment to check result
-
-        # best_pipes[0].
-        # st.write('\nBest pipelines:\n')
-		# st.write(*best_pipes, sep='\n\n')
-    
-    # else:
-    #     st.__loader__
- # else:
- #     st.error("Oops looks like your data is unavailable. Please try uploading you data again.")
-        
