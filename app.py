@@ -17,9 +17,11 @@ from sklearn.datasets import load_diabetes
 # import base64 #for lazypred
 # import io #for lazypred
 # import time #tpot
-# from streamlit_shap import st_shap
+from streamlit_shap import st_shap
 import shap
-from AutoClean import AutoClean
+import numpy as np
+# from AutoClean import AutoClean
+import AutoDataCleaner.AutoDataCleaner as adc
 
 #streamlit-wide-layout
 st.set_page_config(layout="wide") 
@@ -30,9 +32,9 @@ if os.path.exists('dataset.csv'):
 
 # Set default session state variables
 st.session_state.setdefault('df', None)
-# st.session_state.setdefault('target', None)
-# st.session_state.setdefault('col_remove', [])
-# st.session_state.setdefault('norm_method', None)
+st.session_state.setdefault('tuned_model', None)
+st.session_state.setdefault('best', None)
+st.session_state.setdefault('chosen_target', None)
 
 # Function to Download CSV data 
 # https://discuss.streamlit.io/t/how-to-download-file-in-streamlit/1806
@@ -63,7 +65,7 @@ st.text("This web application allows users to automate their machine learning pr
 #adding a horizontal menu
 selected = option_menu(
     menu_title=None,
-    options=["Home","Data Information", "EDA","Data Cleaning","PyCaret","LazyPredict"],
+    options=["Home","Data Information", "EDA","Data Cleaning","AutoML","Interpretability"],
     icons=["house"],
     menu_icon="cast",
     default_index=0,
@@ -157,23 +159,31 @@ if selected == "Data Cleaning":
     st.header("Data Cleaning")
     
     if df is not None: 
-        mode = st.selectbox('Select the mode:', ['auto','manual'])
-        duplicates = st.selectbox('Select the duplicates:', [False,'auto','True'])
-        missing_num = st.selectbox('Select the Missing number:', [False,'auto', 'linreg', 'knn', 'mean', 'median', 'most_frequent', 'delete'])
-        missing_categ = st.selectbox('Select the missing categorical:', [False,'auto', 'logreg', 'knn', 'most_frequent', 'delete'])
-        encode_categ = st.selectbox('Select the Encoding categorical columns', [False,'auto', ['onehot'], ['label']])
-        outliers = st.selectbox('Select the Outlier:', [False,'auto', 'winz', 'delete'])
-        verbose = st.selectbox('Select the verbose:', [True,False])
+        # mode = st.selectbox('Select the mode:', ['auto','manual'])
+        detect_binary = st.selectbox('Do you want to detect binary?', [False,True])
+        # duplicates = st.selectbox('Select the duplicates:', [False,'auto','True'])
+        # missing_num = st.selectbox('Select the Missing number:', [False,'auto', 'linreg', 'knn', 'mean', 'median', 'most_frequent', 'delete'])
+        missing_num = st.selectbox('Select the Missing number:', [False,'remove row', 'mean', 'mode', '*'])
+        numeric_dtype = st.selectbox('Convert data to numeric values?', [True,False])
+        one_hot = st.selectbox('Implement one-hot encoding?:', [True,False])
+        normalize = st.selectbox('Normalize?:', [True,False])
+        remove_columns = st.multiselect("Remove columns, if any:", df.columns)
+        # missing_categ = st.selectbox('Select the missing categorical:', [False,'auto', 'logreg', 'knn', 'most_frequent', 'delete'])
+        # encode_categ = st.selectbox('Select the Encoding categorical columns', [False,'auto', ['onehot'], ['label']])
+        # outliers = st.selectbox('Select the Outlier:', [False,'auto', 'winz', 'delete'])
+        verbose = st.selectbox('Display logs (verbose):', [True,False])
         st.dataframe(df)
         data = df
         if st.button("Run Cleaning"):
         
             st.write("After cleaning the data...")
-            pipeline = AutoClean(data, mode=mode, duplicates=duplicates, missing_num=missing_num, missing_categ=missing_categ, 
-            encode_categ=encode_categ, extract_datetime=False, outliers=outliers, outlier_param=1.5, 
-            logfile=True, verbose=verbose)
-            st.write(pipeline.output)
-            df = pipeline.output
+            # pipeline = AutoClean(data, mode=mode, duplicates=duplicates, missing_num=missing_num, missing_categ=missing_categ, 
+            # encode_categ=encode_categ, extract_datetime=False, outliers=outliers, outlier_param=1.5, 
+            # logfile=True, verbose=verbose)
+            # st.write(pipeline.output)
+            # df = pipeline.output
+            new_data = adc.clean_me(data, detect_binary = detect_binary, one_hot = one_hot, na_cleaner_mode=missing_num, normalize=normalize, remove_columns=remove_columns, verbose=verbose)
+            st.write(new_data)
     else:
         st.__loader__
  # else:
@@ -181,15 +191,18 @@ if selected == "Data Cleaning":
 
 
 #----------------- PyCaret (AutoML using PyCaret)--------------------------------------------------------        
-if selected == "PyCaret":
+if selected == "AutoML":
     st.header("AutoML using PyCaret")
     chosen_target = st.selectbox('Choose the Target Column', df.columns)
+    st.session_state['chosen_target'] = chosen_target
     if chosen_target and chosen_target != df.columns[0]:
         s = ClassificationExperiment()
         s.setup(df, target=chosen_target,normalize=True, 
             transformation=True)
         setup_df = s.pull()
         st.dataframe(setup_df)
+        st.write("Data after cleaning and transformation:")
+        st.write(s.dataset_transformed)
         # st.header("Run AutoML")
         # df[(df['diabetes'] == 1) | (df['diabetes'] == 0)]
         # best_model = compare_models()
@@ -208,16 +221,22 @@ if selected == "PyCaret":
             s.evaluate_model(best)
             # model = s.create_model(compare_df[''][0], feature_selection=True, feature_interaction=True, feature_ratio=True)
             st.write(best)
-            temp_df = df
+            st.session_state['best'] = best
+            temp_df = s.dataset_transformed
+            st.session_state['df'] = temp_df
             # Tune the best model
             tuned_model = s.tune_model(best)
             st.write(tuned_model)
-            # Explain the model using SHAP values
-            explainer = shap.Explainer(tuned_model)
-            shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
+            st.session_state['tuned_model'] = tuned_model
+            # # Explain the model using SHAP values
+            # if(TypeError(shap.Explainer(tuned_model))):
+            #     explainer = shap.TreeExplainer(best)
+            #     shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
+            # else:
+            #     explainer = shap.Explainer(tuned_model)
+            #     shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
 
-            st.subheader("SHAP Summary Plot:")
-            st.pyplot(shap.summary_plot(shap_values, temp_df.drop(chosen_target, axis=1)))    
+            # st.write(np.shape(shap_values))
 
             # st.write(s.interpret_model(best, plot='summary'))
             # Display additional information or visualizations based on the model output
@@ -235,7 +254,42 @@ if selected == "PyCaret":
             s.plot_model(best, plot = 'feature_all', display_format='streamlit') 
 
             # interactive(children=(ToggleButtons(description='Plot Type:', icons=('',), options=(('Pipeline Plot', 'pipeline'), ('Hyperparameters', 'parameter'), ('AUC', 'auc'), ('Confusion Matrix', 'confusion_matrix'), ('Threshold', 'threshold'), ('Precision Recall', 'pr'), ('Prediction Error', 'error'), ('Class Report', 'class_report'), ('Feature Selection', 'rfe'), ('Learning Curve', 'learning'), ('Manifold Learning', 'manifold'), ('Calibration Curve', 'calibration'), ('Validation Curve', 'vc'), ('Dimensions', 'dimension'), ('Feature Importance', 'feature'), ('Feature Importance (All)', 'feature_all'), ('Decision Boundary', 'boundary'), ('Lift Chart', 'lift'), ('Gain Chart', 'gain'), ('Decision Tree', 'tree'), ('KS Statistic Plot', 'ks')), value='pipeline'), Output()), _dom_classes=('widget-interact',))
+            # st.subheader("SHAP Summary Plot:")
+            # st_shap(shap.summary_plot(shap_values, temp_df.drop(chosen_target, axis=1))) 
+            
+            # st_shap(shap.plots.waterfall(shap_values[0]))
+            # st_shap(shap.plots.beeswarm(shap_values))
+
+            # st_shap(shap.force_plot(explainer.expected_value, shap_values[0,:]))
+            # st_shap(shap.force_plot(explainer.expected_value, shap_values[:1000,:]))
+
         else:
             st.__loader__
 
             
+#--------------------------SHAP (Interpretability)-------------------------------------
+if selected == "Interpretability":
+    st.header("Interpretability using SHAP")    
+    tuned_model = st.session_state['tuned_model']
+    temp_df = st.session_state['df']
+    chosen_target = st.session_state['chosen_target']
+    best = st.session_state['best']
+    # Explain the model using SHAP values
+    if(TypeError(shap.Explainer(tuned_model))):
+        explainer = shap.TreeExplainer(best)
+        shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
+    else:
+        explainer = shap.Explainer(tuned_model)
+        shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
+
+    st.write(np.shape(shap_values))
+
+    st.subheader("SHAP Summary Plot:")
+    st_shap(shap.summary_plot(shap_values, temp_df.drop(chosen_target, axis=1))) 
+    
+    # st_shap(shap.plots.waterfall(shap_values[0]))
+    # st_shap(shap.plots.beeswarm(shap_values),height=300,width=200)
+    st_shap(shap.plots.bar(shap_values),height=300,width=200)
+
+    st_shap(shap.force_plot(explainer.expected_value, shap_values[0,:]))
+    st_shap(shap.force_plot(explainer.expected_value, shap_values[:1000,:]))
