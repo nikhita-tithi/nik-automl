@@ -7,6 +7,9 @@ pycaret
 scikit-learn==1.1.1
 path
 # lazypredict
-py-AutoClean==1.1.3
+# py-AutoClean==1.1.3
 shap
-AutoClean
+# AutoClean
+streamlit_shap
+numpy
+AutoDataCleaner
