@@ -1,2 +1,14 @@
 [server]
 enableStaticServing = true
+
+[theme]
+
+primaryColor = '#4b2e83' # Purple
+
+secondaryColor = '#330066' # Dark Purple
+
+backgroundColor = '#b7a57a' # Gold
+
+secondaryBackgroundColor = '#85754d' # Metallic Gold
+
+textColor = '#330066' # Purple

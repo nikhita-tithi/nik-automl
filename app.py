@@ -24,7 +24,16 @@ import numpy as np
 import AutoDataCleaner.AutoDataCleaner as adc
 
 #streamlit-wide-layout
-st.set_page_config(layout="wide") 
+st.set_page_config(layout="wide",page_title="AutoML by Nikhita") 
+
+# To hide the default header and footer of the streamlit app
+# hide_default_format = """
+#        <style>
+#        #MainMenu {visibility: hidden; }
+#        footer {visibility: hidden;}
+#        </style>
+#        """
+# st.markdown(hide_default_format, unsafe_allow_html=True)
 
 # Load the sample file from local folder
 if os.path.exists('dataset.csv'): 
@@ -81,6 +90,10 @@ if selected == "Home":
     if file: 
         df = pd.read_csv(file, index_col=None)
         df.to_csv('dataset.csv', index=None)
+        # count_row = df.shape[0]
+        # #Temp solution for heavy data, considering a subset
+        # if count_row > 100000:
+        #     df = df.sample(50000)
         st.dataframe(df) 
         st.text("To Auto-Analyze your data click the next Tab - Data Information!")
         if st.button("Next Tab"):
@@ -141,7 +154,7 @@ if selected == "Data Information":
 #----------------- EDA (Data analysis)--------------------------------------------------------
 if selected == "EDA":
     st.header("Auto-analysis - EDA")
-    profile = ProfileReport(df, title="Profiling Report",explorative=True)
+    profile = ProfileReport(df, title="Profiling Report",explorative=True, dark_mode=True)
     if profile: 
         st_profile_report(profile)
         if st.button("Home"):
