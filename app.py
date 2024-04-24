@@ -17,9 +17,9 @@ from sklearn.datasets import load_diabetes
 # import base64 #for lazypred
 # import io #for lazypred
 # import time #tpot
-from streamlit_shap import st_shap
-import shap
-import numpy as np
+# from streamlit_shap import st_shap
+# import shap
+# import numpy as np
 # from AutoClean import AutoClean
 import AutoDataCleaner.AutoDataCleaner as adc
 
@@ -282,27 +282,28 @@ if selected == "AutoML":
             
 #--------------------------SHAP (Interpretability)-------------------------------------
 if selected == "Interpretability":
-    st.header("Interpretability using SHAP")    
-    tuned_model = st.session_state['tuned_model']
-    temp_df = st.session_state['df']
-    chosen_target = st.session_state['chosen_target']
-    best = st.session_state['best']
-    # Explain the model using SHAP values
-    if(TypeError(shap.Explainer(tuned_model))):
-        explainer = shap.TreeExplainer(best)
-        shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
-    else:
-        explainer = shap.Explainer(tuned_model)
-        shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
+    st.header("Interpretability using SHAP")  
+    st.subheader("Oops! looks like something isn't working right, we are working on it. Thank you for your patience.")  
+    # tuned_model = st.session_state['tuned_model']
+    # temp_df = st.session_state['df']
+    # chosen_target = st.session_state['chosen_target']
+    # best = st.session_state['best']
+    # # Explain the model using SHAP values
+    # if(TypeError(shap.Explainer(tuned_model))):
+    #     explainer = shap.TreeExplainer(best)
+    #     shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
+    # else:
+    #     explainer = shap.Explainer(tuned_model)
+    #     shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
 
-    st.write(np.shape(shap_values))
+    # st.write(np.shape(shap_values))
 
-    st.subheader("SHAP Summary Plot:")
-    st_shap(shap.summary_plot(shap_values, temp_df.drop(chosen_target, axis=1))) 
+    # st.subheader("SHAP Summary Plot:")
+    # st_shap(shap.summary_plot(shap_values, temp_df.drop(chosen_target, axis=1))) 
     
-    # st_shap(shap.plots.waterfall(shap_values[0]))
-    # st_shap(shap.plots.beeswarm(shap_values),height=300,width=200)
-    st_shap(shap.plots.bar(shap_values),height=300,width=200)
+    # # st_shap(shap.plots.waterfall(shap_values[0]))
+    # # st_shap(shap.plots.beeswarm(shap_values),height=300,width=200)
+    # st_shap(shap.plots.bar(shap_values),height=300,width=200)
 
-    st_shap(shap.force_plot(explainer.expected_value, shap_values[0,:]))
-    st_shap(shap.force_plot(explainer.expected_value, shap_values[:1000,:]))
+    # st_shap(shap.force_plot(explainer.expected_value, shap_values[0,:]))
+    # st_shap(shap.force_plot(explainer.expected_value, shap_values[:1000,:]))
