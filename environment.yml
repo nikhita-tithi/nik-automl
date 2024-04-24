@@ -1,5 +1,15 @@
 name: research
-channels:
+  - msys2
+  - anaconda
   - conda-forge
+  - defaults
 dependencies:
   - compas
+  - pandas==1.5.0
+  - streamlit==1.13.0
+  - streamlit_option_menu==0.3.2
+  - ydata_profiling
+  - streamlit_pandas_profiling
+  - pycaret
+  - path
+  - AutoDataCleaner
