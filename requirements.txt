@@ -4,7 +4,7 @@ streamlit_option_menu==0.3.2
 ydata_profiling
 streamlit_pandas_profiling
 pycaret
-scikit-learn==1.1.1
+# scikit-learn==1.1.1
 path
 # lazypredict
 # py-AutoClean==1.1.3
