@@ -3,3 +3,4 @@ channels:
   - conda-forge
 dependencies:
   - compas
+  - streamlit_option_menu
