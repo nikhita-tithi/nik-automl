@@ -1,7 +1,7 @@
 pandas
 streamlit
 streamlit_option_menu
-ydata_profiling
+ydata-profiling
 streamlit_pandas_profiling
 # pycaret
 path
