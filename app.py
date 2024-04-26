@@ -5,7 +5,7 @@ import pandas as pd
 from streamlit_option_menu import option_menu
 from ydata_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
-from pycaret.classification import ClassificationExperiment
+# from pycaret.classification import ClassificationExperiment
 # from sklearn.datasets import load_diabetes
 # import lazypredict
 # from lazypredict.Supervised import LazyClassifier
@@ -205,79 +205,80 @@ if selected == "Data Cleaning":
 
 #----------------- PyCaret (AutoML using PyCaret)--------------------------------------------------------        
 if selected == "AutoML":
-    st.header("AutoML using PyCaret")
-    chosen_target = st.selectbox('Choose the Target Column', df.columns)
-    st.session_state['chosen_target'] = chosen_target
-    if chosen_target and chosen_target != df.columns[0]:
-        s = ClassificationExperiment()
-        s.setup(df, target=chosen_target,normalize=True, 
-            transformation=True)
-        setup_df = s.pull()
-        st.dataframe(setup_df)
-        st.write("Data after cleaning and transformation:")
-        st.write(s.dataset_transformed)
-        # st.header("Run AutoML")
-        # df[(df['diabetes'] == 1) | (df['diabetes'] == 0)]
-        # best_model = compare_models()
-        best = s.compare_models() 
-        # progress_text = "Operation in progress. Please wait."
-        # my_bar = st.progress(0, text=progress_text)
+    print("This works")
+    # st.header("AutoML using PyCaret")
+    # chosen_target = st.selectbox('Choose the Target Column', df.columns)
+    # st.session_state['chosen_target'] = chosen_target
+    # if chosen_target and chosen_target != df.columns[0]:
+    #     s = ClassificationExperiment()
+    #     s.setup(df, target=chosen_target,normalize=True, 
+    #         transformation=True)
+    #     setup_df = s.pull()
+    #     st.dataframe(setup_df)
+    #     st.write("Data after cleaning and transformation:")
+    #     st.write(s.dataset_transformed)
+    #     # st.header("Run AutoML")
+    #     # df[(df['diabetes'] == 1) | (df['diabetes'] == 0)]
+    #     # best_model = compare_models()
+    #     best = s.compare_models() 
+    #     # progress_text = "Operation in progress. Please wait."
+    #     # my_bar = st.progress(0, text=progress_text)
         
-        if best:
-            compare_df = s.pull()
-            st.dataframe(compare_df)
-            # bmodel = list(compare_df)
-            st.header("Best Model")
-            st.text(best)
-            # st.dataframe(best_model)
-            # evaluate_model(compare_df)
-            s.evaluate_model(best)
-            # model = s.create_model(compare_df[''][0], feature_selection=True, feature_interaction=True, feature_ratio=True)
-            st.write(best)
-            st.session_state['best'] = best
-            temp_df = s.dataset_transformed
-            st.session_state['df'] = temp_df
-            # Tune the best model
-            tuned_model = s.tune_model(best)
-            st.write(tuned_model)
-            st.session_state['tuned_model'] = tuned_model
-            # # Explain the model using SHAP values
-            # if(TypeError(shap.Explainer(tuned_model))):
-            #     explainer = shap.TreeExplainer(best)
-            #     shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
-            # else:
-            #     explainer = shap.Explainer(tuned_model)
-            #     shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
+    #     if best:
+    #         compare_df = s.pull()
+    #         st.dataframe(compare_df)
+    #         # bmodel = list(compare_df)
+    #         st.header("Best Model")
+    #         st.text(best)
+    #         # st.dataframe(best_model)
+    #         # evaluate_model(compare_df)
+    #         s.evaluate_model(best)
+    #         # model = s.create_model(compare_df[''][0], feature_selection=True, feature_interaction=True, feature_ratio=True)
+    #         st.write(best)
+    #         st.session_state['best'] = best
+    #         temp_df = s.dataset_transformed
+    #         st.session_state['df'] = temp_df
+    #         # Tune the best model
+    #         tuned_model = s.tune_model(best)
+    #         st.write(tuned_model)
+    #         st.session_state['tuned_model'] = tuned_model
+    #         # # Explain the model using SHAP values
+    #         # if(TypeError(shap.Explainer(tuned_model))):
+    #         #     explainer = shap.TreeExplainer(best)
+    #         #     shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
+    #         # else:
+    #         #     explainer = shap.Explainer(tuned_model)
+    #         #     shap_values = explainer.shap_values(temp_df.drop(chosen_target, axis=1))
 
-            # st.write(np.shape(shap_values))
+    #         # st.write(np.shape(shap_values))
 
-            # st.write(s.interpret_model(best, plot='summary'))
-            # Display additional information or visualizations based on the model output
-            # Use interpret_model to generate and display charts
-            # st.subheader("Visualizations")
-            # interpret_model(best_model)
+    #         # st.write(s.interpret_model(best, plot='summary'))
+    #         # Display additional information or visualizations based on the model output
+    #         # Use interpret_model to generate and display charts
+    #         # st.subheader("Visualizations")
+    #         # interpret_model(best_model)
 
-            # Show Streamlit charts based on the evaluation
-            st.subheader("Model Evaluation Charts")
+    #         # Show Streamlit charts based on the evaluation
+    #         st.subheader("Model Evaluation Charts")
   
-            s.plot_model(best, plot = 'confusion_matrix', display_format='streamlit')
-            s.plot_model(best, plot = 'auc', display_format='streamlit')
-            s.plot_model(best, plot = 'feature', display_format='streamlit') 
+    #         s.plot_model(best, plot = 'confusion_matrix', display_format='streamlit')
+    #         s.plot_model(best, plot = 'auc', display_format='streamlit')
+    #         s.plot_model(best, plot = 'feature', display_format='streamlit') 
 
-            s.plot_model(best, plot = 'feature_all', display_format='streamlit') 
+    #         s.plot_model(best, plot = 'feature_all', display_format='streamlit') 
 
-            # interactive(children=(ToggleButtons(description='Plot Type:', icons=('',), options=(('Pipeline Plot', 'pipeline'), ('Hyperparameters', 'parameter'), ('AUC', 'auc'), ('Confusion Matrix', 'confusion_matrix'), ('Threshold', 'threshold'), ('Precision Recall', 'pr'), ('Prediction Error', 'error'), ('Class Report', 'class_report'), ('Feature Selection', 'rfe'), ('Learning Curve', 'learning'), ('Manifold Learning', 'manifold'), ('Calibration Curve', 'calibration'), ('Validation Curve', 'vc'), ('Dimensions', 'dimension'), ('Feature Importance', 'feature'), ('Feature Importance (All)', 'feature_all'), ('Decision Boundary', 'boundary'), ('Lift Chart', 'lift'), ('Gain Chart', 'gain'), ('Decision Tree', 'tree'), ('KS Statistic Plot', 'ks')), value='pipeline'), Output()), _dom_classes=('widget-interact',))
-            # st.subheader("SHAP Summary Plot:")
-            # st_shap(shap.summary_plot(shap_values, temp_df.drop(chosen_target, axis=1))) 
+    #         # interactive(children=(ToggleButtons(description='Plot Type:', icons=('',), options=(('Pipeline Plot', 'pipeline'), ('Hyperparameters', 'parameter'), ('AUC', 'auc'), ('Confusion Matrix', 'confusion_matrix'), ('Threshold', 'threshold'), ('Precision Recall', 'pr'), ('Prediction Error', 'error'), ('Class Report', 'class_report'), ('Feature Selection', 'rfe'), ('Learning Curve', 'learning'), ('Manifold Learning', 'manifold'), ('Calibration Curve', 'calibration'), ('Validation Curve', 'vc'), ('Dimensions', 'dimension'), ('Feature Importance', 'feature'), ('Feature Importance (All)', 'feature_all'), ('Decision Boundary', 'boundary'), ('Lift Chart', 'lift'), ('Gain Chart', 'gain'), ('Decision Tree', 'tree'), ('KS Statistic Plot', 'ks')), value='pipeline'), Output()), _dom_classes=('widget-interact',))
+    #         # st.subheader("SHAP Summary Plot:")
+    #         # st_shap(shap.summary_plot(shap_values, temp_df.drop(chosen_target, axis=1))) 
             
-            # st_shap(shap.plots.waterfall(shap_values[0]))
-            # st_shap(shap.plots.beeswarm(shap_values))
+    #         # st_shap(shap.plots.waterfall(shap_values[0]))
+    #         # st_shap(shap.plots.beeswarm(shap_values))
 
-            # st_shap(shap.force_plot(explainer.expected_value, shap_values[0,:]))
-            # st_shap(shap.force_plot(explainer.expected_value, shap_values[:1000,:]))
+    #         # st_shap(shap.force_plot(explainer.expected_value, shap_values[0,:]))
+    #         # st_shap(shap.force_plot(explainer.expected_value, shap_values[:1000,:]))
 
-        else:
-            st.__loader__
+    #     else:
+    #         st.__loader__
 
             
 #--------------------------SHAP (Interpretability)-------------------------------------
