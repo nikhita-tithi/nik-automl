@@ -6,3 +6,4 @@ streamlit_pandas_profiling
 # pycaret
 path
 AutoDataCleaner
+numba==0.58.1
