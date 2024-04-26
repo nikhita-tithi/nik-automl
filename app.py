@@ -5,7 +5,7 @@ import pandas as pd
 from streamlit_option_menu import option_menu
 from ydata_profiling import ProfileReport
 from streamlit_ydata_profiling import st_profile_report
-from pycaret.classification import ClassificationExperiment
+from pycaret.classification import ClassificationExperiment, plot_model
 # from sklearn.datasets import load_diabetes
 # import lazypredict
 # from lazypredict.Supervised import LazyClassifier
@@ -240,7 +240,7 @@ if selected == "AutoML":
             st.session_state['df'] = temp_df
             # Tune the best model
             tuned_model = s.tune_model(best)
-            st.write(tuned_model)
+            # st.write(tuned_model)
             st.session_state['tuned_model'] = tuned_model
             # # Explain the model using SHAP values
             # if(TypeError(shap.Explainer(tuned_model))):
@@ -256,16 +256,17 @@ if selected == "AutoML":
             # Display additional information or visualizations based on the model output
             # Use interpret_model to generate and display charts
             # st.subheader("Visualizations")
-            # interpret_model(best_model)
+            # s.interpret_model(best)
 
             # Show Streamlit charts based on the evaluation
             st.subheader("Model Evaluation Charts")
-  
+            # s.plot_model(best,plot='diagnostics',display_format='streamlit')
+            # st.write(s.check_fairness(best))
             s.plot_model(best, plot = 'confusion_matrix', display_format='streamlit')
             s.plot_model(best, plot = 'auc', display_format='streamlit')
-            s.plot_model(best, plot = 'feature', display_format='streamlit') 
-
-            s.plot_model(best, plot = 'feature_all', display_format='streamlit') 
+            s.plot_model(best, plot = 'feature', display_format='streamlit')
+            
+            s.plot_model(best, plot = 'feature_all', display_format='streamlit')
 
             # interactive(children=(ToggleButtons(description='Plot Type:', icons=('',), options=(('Pipeline Plot', 'pipeline'), ('Hyperparameters', 'parameter'), ('AUC', 'auc'), ('Confusion Matrix', 'confusion_matrix'), ('Threshold', 'threshold'), ('Precision Recall', 'pr'), ('Prediction Error', 'error'), ('Class Report', 'class_report'), ('Feature Selection', 'rfe'), ('Learning Curve', 'learning'), ('Manifold Learning', 'manifold'), ('Calibration Curve', 'calibration'), ('Validation Curve', 'vc'), ('Dimensions', 'dimension'), ('Feature Importance', 'feature'), ('Feature Importance (All)', 'feature_all'), ('Decision Boundary', 'boundary'), ('Lift Chart', 'lift'), ('Gain Chart', 'gain'), ('Decision Tree', 'tree'), ('KS Statistic Plot', 'ks')), value='pipeline'), Output()), _dom_classes=('widget-interact',))
             # st.subheader("SHAP Summary Plot:")
