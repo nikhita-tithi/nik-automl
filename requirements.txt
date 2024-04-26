@@ -7,3 +7,4 @@ streamlit_pandas_profiling
 path
 AutoDataCleaner
 numba==0.58.1
+visions>0.7.1
