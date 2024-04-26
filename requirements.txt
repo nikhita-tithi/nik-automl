@@ -2,7 +2,7 @@ pandas
 streamlit
 streamlit_option_menu
 ydata-profiling
-streamlit_pandas_profiling
+streamlit-ydata-profiling
 # pycaret
 path
 AutoDataCleaner
