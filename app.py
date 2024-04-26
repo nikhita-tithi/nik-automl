@@ -154,7 +154,10 @@ if selected == "Data Information":
 #----------------- EDA (Data analysis)--------------------------------------------------------
 if selected == "EDA":
     st.header("Auto-analysis - EDA")
-    profile = ProfileReport(df, title="Profiling Report",explorative=True)
+    low_level = False
+    if len(df.columns)>55:
+        low_level = True
+    profile = ProfileReport(df, title="Profiling Report",explorative=True,minimal=low_level)
     if profile: 
         st_profile_report(profile)
         if st.button("Home"):
