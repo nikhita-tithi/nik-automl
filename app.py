@@ -154,7 +154,7 @@ if selected == "Data Information":
 #----------------- EDA (Data analysis)--------------------------------------------------------
 if selected == "EDA":
     st.header("Auto-analysis - EDA")
-    profile = ProfileReport(df, title="Profiling Report",explorative=True, dark_mode=True)
+    profile = ProfileReport(df, title="Profiling Report",explorative=True)
     if profile: 
         st_profile_report(profile)
         if st.button("Home"):
@@ -265,7 +265,7 @@ if selected == "AutoML":
             s.plot_model(best, plot = 'confusion_matrix', display_format='streamlit')
             s.plot_model(best, plot = 'auc', display_format='streamlit')
             s.plot_model(best, plot = 'feature', display_format='streamlit')
-            
+
             s.plot_model(best, plot = 'feature_all', display_format='streamlit')
 
             # interactive(children=(ToggleButtons(description='Plot Type:', icons=('',), options=(('Pipeline Plot', 'pipeline'), ('Hyperparameters', 'parameter'), ('AUC', 'auc'), ('Confusion Matrix', 'confusion_matrix'), ('Threshold', 'threshold'), ('Precision Recall', 'pr'), ('Prediction Error', 'error'), ('Class Report', 'class_report'), ('Feature Selection', 'rfe'), ('Learning Curve', 'learning'), ('Manifold Learning', 'manifold'), ('Calibration Curve', 'calibration'), ('Validation Curve', 'vc'), ('Dimensions', 'dimension'), ('Feature Importance', 'feature'), ('Feature Importance (All)', 'feature_all'), ('Decision Boundary', 'boundary'), ('Lift Chart', 'lift'), ('Gain Chart', 'gain'), ('Decision Tree', 'tree'), ('KS Statistic Plot', 'ks')), value='pipeline'), Output()), _dom_classes=('widget-interact',))

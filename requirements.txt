@@ -3,6 +3,7 @@ streamlit
 streamlit_option_menu
 ydata-profiling
 streamlit-ydata-profiling
+streamlit_ydata_profiling
 pycaret
 path
 AutoDataCleaner
