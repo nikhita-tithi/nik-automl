@@ -10,3 +10,6 @@ backgroundColor = '#b7a57a' # Gold
 secondaryBackgroundColor = '#85754d' # Metallic Gold
 
 textColor = '#330066' # Purple
+
+[client]
+showSidebarNavigation = false
