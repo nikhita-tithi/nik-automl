@@ -16,6 +16,7 @@ st.session_state.setdefault('df', None)
 st.session_state.setdefault('tuned_model', None)
 st.session_state.setdefault('best', None)
 st.session_state.setdefault('chosen_target', None)
+st.session_state.setdefault('cleaned_data', None)
 
 # title of the web application
 st.title("Welcome to iBioML - AutoML")
