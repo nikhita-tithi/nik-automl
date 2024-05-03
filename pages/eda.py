@@ -15,10 +15,9 @@ navbar.nav(current_page)
 
 #----------------- EDA (Data analysis)--------------------------------------------------------
 st.header("Auto-analysis - EDA")
-df = st.session_state['df']
 
-if df is not None:
-
+if 'df' in st.session_state and st.session_state['df'] is not None: 
+    df = st.session_state['df']
     low_level = False
     if len(df.columns)>55:
         low_level = True

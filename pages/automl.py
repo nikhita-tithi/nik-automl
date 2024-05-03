@@ -12,10 +12,6 @@ st.header(current_page)
 
 navbar.nav(current_page)
 
-# Fetching session state variables
-df = st.session_state['df']
-cleaned_data = st.session_state['cleaned_data']
-
 def run_automl(data):
     chosen_target = st.selectbox('Choose the Target Column', data.columns)
     st.session_state['chosen_target'] = chosen_target
@@ -92,15 +88,22 @@ def run_automl(data):
 #----------------- PyCaret (AutoML using PyCaret)--------------------------------------------------------        
 
 st.header("AutoML using PyCaret")
-if df is not None and cleaned_data is not None:
-    data_for_ml = st.selectbox('Which data would you like to use - Original data or Cleaned data?',['Original data','Cleaned data'])
-    if data_for_ml == 'Original data':
+
+if 'df' in st.session_state and st.session_state['df'] is not None: 
+
+    # Fetching session state variables
+    df = st.session_state['df']
+    cleaned_data = st.session_state['cleaned_data']
+
+    if df is not None and cleaned_data is not None:
+        data_for_ml = st.selectbox('Which data would you like to use - Original data or Cleaned data?',['Original data','Cleaned data'])
+        if data_for_ml == 'Original data':
+            run_automl(df)
+        elif data_for_ml == 'Cleaned data':
+            run_automl(cleaned_data)
+    elif df is not None:
+        data_for_ml = df
         run_automl(df)
-    elif data_for_ml == 'Cleaned data':
-        run_automl(cleaned_data)
-elif df is not None:
-    data_for_ml = df
-    run_automl(df)
 else:
      st.error("Oops looks like your data is unavailable. Please try uploading you data again.")
 

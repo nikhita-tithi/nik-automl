@@ -12,10 +12,6 @@ st.header(current_page)
 
 navbar.nav(current_page)
 
-# Fetching session state variables
-df = st.session_state['df']
-cleaned_data = st.session_state['cleaned_data']
-
 # Method to display the cleaned data
 def display_data(cleaned_data):
     st.write("After cleaning the data...")
@@ -28,7 +24,11 @@ def display_data(cleaned_data):
 
 st.header("Data Cleaning")
 
-if df is not None: 
+if 'df' in st.session_state and st.session_state['df'] is not None: 
+    # Fetching session state variables
+    df = st.session_state['df']
+    cleaned_data = st.session_state['cleaned_data']
+
     # mode = st.selectbox('Select the mode:', ['auto','manual'])
     detect_binary = st.selectbox('Do you want to detect binary?', [False,True])
     # duplicates = st.selectbox('Select the duplicates:', [False,'auto','True'])

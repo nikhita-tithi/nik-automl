@@ -14,8 +14,9 @@ navbar.nav(current_page)
 #----------------- Data Information (Data Summary)--------------------------------------------------------
 
 st.header("Data Information")
-df = st.session_state['df']
-if df is not None: 
+
+if 'df' in st.session_state and st.session_state['df'] is not None: 
+    df = st.session_state['df']
     # show entire data
     data = df
     st.write("Show all data")
