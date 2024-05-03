@@ -52,7 +52,7 @@ if df is not None:
         st.session_state['cleaned_data']=new_data
         # To download the new data
         st.markdown("To download the new data click on the download button below!")
-        st.text("*PLEASE NOTE : To use the new data for analysis or autoMl, you would have to download it and upload the file as new data.*")
+        st.text("*PLEASE NOTE : To use the new data for analysis on previous tabs, you would have to download it and upload the file as new data.*")
         
         def convert_df(df):
             return df.to_csv(index=False).encode('utf-8')
@@ -67,6 +67,10 @@ if df is not None:
         key='download-csv')
     if cleaned_data is not None:
         display_data(cleaned_data)
+
+        # Going to the next tab
+        st.markdown("To run AutoML on your data click click on the button below!")
+        st.page_link('pages/automl.py', label="Next Tab - AutoML")
 else:
      st.error("Oops looks like your data is unavailable. Please try uploading you data again.")
 

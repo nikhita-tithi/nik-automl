@@ -27,8 +27,8 @@ if df is not None:
         st_profile_report(profile)
 
         # Going to the next tab
-        st.markdown("To run AutoML on your data click click on the button below!")
-        st.page_link('pages/automl.py', label="Next Tab - AutoML")
+        st.markdown("To clean your data click on the button below!")
+        st.page_link('pages/cleaning.py', label="Next Tab - Data Cleaning")
     else:
         st.__loader__
 else:
