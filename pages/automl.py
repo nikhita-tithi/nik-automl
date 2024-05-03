@@ -84,6 +84,9 @@ def run_automl(data):
             # st_shap(shap.force_plot(explainer.expected_value, shap_values[0,:]))
             # st_shap(shap.force_plot(explainer.expected_value, shap_values[:1000,:]))
 
+            # Going to the next tab
+            st.markdown("To run interpretability on your model click on the button below!")
+            st.page_link('pages/interpretability.py', label="Next Tab - Interpretability")
 
 #----------------- PyCaret (AutoML using PyCaret)--------------------------------------------------------        
 
