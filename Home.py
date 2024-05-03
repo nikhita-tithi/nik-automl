@@ -11,6 +11,12 @@ st.set_page_config(layout="wide",page_title="AutoML by Nikhita")
 if os.path.exists('dataset.csv'): 
     df = pd.read_csv('dataset.csv', index_col=None)
 
+# Set default session state variables
+st.session_state.setdefault('df', None)
+st.session_state.setdefault('tuned_model', None)
+st.session_state.setdefault('best', None)
+st.session_state.setdefault('chosen_target', None)
+
 # title of the web application
 st.title("Welcome to iBioML - AutoML")
 
@@ -50,7 +56,8 @@ if file:
     df.to_csv('dataset.csv', index=None)
     st.success('Data Uploaded Successfully')
     st.dataframe(df) 
-    st.markdown("To Auto-Analyze your data click the next Tab - Data Information!")
+    st.session_state['df'] = df
+    st.markdown("To get info about your data click the next Tab - Data Information!")
     st.page_link('pages/information.py', label="Next Tab - Data Information")
 
 # if existing sample file is used
@@ -60,7 +67,8 @@ elif(st.button("[Diabetes_dataset.csv](http://nik-automl.streamlit.app/app/stati
         df.to_csv('dataset.csv', index=None)
     st.success('Data Uploaded Successfully')
     st.dataframe(df) 
-    st.markdown("To Auto-Analyze your data click next!")
+    st.session_state['df'] = df
+    st.markdown("To get info about your data click next!")
     st.page_link('pages/information.py', label="Next Tab - Data Information")
 
 # if no or wrong format file is uploaded 
