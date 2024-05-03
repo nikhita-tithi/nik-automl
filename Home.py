@@ -49,6 +49,7 @@ st.markdown("""
 st.header("Upload Your Dataset")
 file = st.file_uploader('Upload your data here', type=['csv']) #leaving it empty as we have already given a header with a label
 st.markdown("Or you can use this sample dataset:")
+df = st.session_state['df'] 
 
 # if a file is uploaded
 if file: 
@@ -70,6 +71,10 @@ elif(st.button("[Diabetes_dataset.csv](http://nik-automl.streamlit.app/app/stati
     st.session_state['df'] = df
     st.markdown("To get info about your data click next!")
     st.page_link('pages/information.py', label="Next Tab - Data Information")
+
+# if you are revisting the home page
+elif df is not None:
+    st.dataframe(df)
 
 # if no or wrong format file is uploaded 
 else:
